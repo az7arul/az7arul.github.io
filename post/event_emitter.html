@@ -1,0 +1,56 @@
+<!DOCTYPE html><html><head><title>Az7ar</title><meta charset="utf-8"><link rel="shortcut icon" href="../favicon.ico"><link rel="stylesheet" href="../stylesheets/bootstrap.min.css"><link rel="stylesheet" href="../stylesheets/app.css"></head><body><div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a id="az-brand" href="../index.html" class="brand"><img id="az-logo" src="../images/logo.png" height="60" weidth="90"><span>'s Blog</span></a></div></div></div><div class="wrap"><div class="container"><div class="row"><div class="span8"><div class="post"><h1><a href="event_emitter.html">Node EventEmitter</a></h1><span class="date">4.21.2013</span><div class="post content"><h2>"Talk is cheap show me the code"</h2>
+
+<pre><code>var EventEmitter = require('events').EventEmitter;
+
+var Ticker = function(){
+    var self = this;
+    EventEmitter.call(self);
+    self.startTicking = function(){
+        self.emit('tick');
+        setTimeout(self.startTicking, 1000);
+    }
+}
+
+Ticker.prototype = new EventEmitter();
+
+var ticker = new Ticker();
+
+ticker.startTicking();
+
+ticker.on('tick', function(){
+    console.log('got a tick');
+});
+</code></pre>
+
+<!--more-->
+
+<h2>Output</h2>
+
+<pre><code>got a tick
+(1 second delay)
+got a tick
+(1 second delay)
+got a tick
+(1 second delay)
+got a ...
+</code></pre>
+
+<h2>Explanation</h2>
+
+<p>First we require <code>EventEmitter</code> and  define a <code>Ticker</code> class  that has a method <code>startTicking</code> which <em>emits</em> an event <strong>tick</strong> every 1 second.</p>
+
+<p>Then we make <code>Ticker</code> inherit from it(<code>EventEmitter</code>) by setting <code>Ticker</code>'s  prototype to an <code>EventEmitter</code> object. Note that we could have also used <code>util</code> from node like below for inheriting.</p>
+
+<pre><code>var util = require('util');
+util.inherits(Ticker, EventEmitter);
+</code></pre>
+
+<p>After that we instansiate a <code>Ticker</code> object <strong>ticker</strong> and call <strong>startTicking</strong> method on it.</p>
+
+<p>Finally, we add a listener for the <strong>tick</strong> event which outputs "got a tick" every time it receives a <strong>tick</strong> event.</p></div><div class="tags"><a href="../tag/node.html"><span class="label label-info tag-label">node</span></a><a href="../tag/observer%20pattern.html"><span class="label label-info tag-label">observer pattern</span></a><a href="../tag/events.html"><span class="label label-info tag-label">events</span></a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'az7ar'; // Required - Replace example with your forum shortname
+var disqus_identifier = 'Node EventEmitter';
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></div></div><div class="span4"><div class="well sidebar-nav"><ul class="nav nav-list"><li class="nav-header">categories</li><li><a href="../category/javascript.html">javascript</a></li><li><a href="../category/ruby.html">ruby</a></li><li class="nav-header">tags</li><li><a href="../tag/events.html">events</a></li><li><a href="../tag/hash.html">hash</a></li><li><a href="../tag/node.html">node</a></li><li><a href="../tag/observer%20pattern.html">observer pattern</a></li><li><a href="../tag/ruby.html">ruby</a></li></ul></div></div></div></div></div></body><script type="text/javascript" src="../javascripts/analytics.js"></script><footer id="footer" class="footer"><div class="container"><p id="copy">Copyright ©  Az7ar 2013</p></div></footer></html>

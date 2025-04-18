@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><title>Az7ar</title><meta charset="utf-8"><link rel="shortcut icon" href="../favicon.ico"><link rel="stylesheet" href="../stylesheets/bootstrap.min.css"><link rel="stylesheet" href="../stylesheets/app.css"></head><body><div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a id="az-brand" href="../index.html" class="brand"><img id="az-logo" src="../images/logo.png" height="60" weidth="90"><span>'s Blog</span></a></div></div></div><div class="wrap"><div class="container"><div class="row"><div class="span8"><div class="post"><h1><a href="object_like_hash.html">Object Like Hash</a></h1><span class="date">4.28.2013</span><div class="post content"><h2>"My crime is that of curiosity"</h2>
+
+<p>While I was going through the source code of <a href="https://github.com/camping/camping">camping</a> this piece of code that gives you Object like <strong>Hash</strong> got my attention. Instead of using Hash['key'] it allows you to use Hash.key hence the name "Object Like Hash".</p>
+
+<h2>Code</h2>
+
+<pre><code>class H &lt; Hash
+    def method_missing(m,*a)
+          m.to_s=~/=$/?self[$`]=a[0]:a==[]?self[m.to_s]:super
+      end
+
+      undef id, type if ?? == 63
+  end
+</code></pre>
+
+<h2>Usage</h2>
+
+<!--more-->
+
+<pre><code>olh = H.new
+olh.key1 = 'value1'
+olh.key2 = 'value2'
+
+olh.key1 #=&gt; 'value1'
+olh.key2 #=&gt; 'value2'
+</code></pre>
+
+<h2>Explanation</h2>
+
+<p><code>H</code> is our object like hash. It inherits from <code>Hash</code>. The interesting part lies in changing its <code>method_missing</code> method. What the complex looking one liner does is :</p>
+
+<p>If the method contains <code>=</code> at the very end it is an assignment. So, calling </p>
+
+<p><code>olh.key1= "value1"</code>
+ translates to <code>olh["key1"] = 'value1'</code></p>
+
+<p>Otherwise (when we call <code>olh.key1</code>) it returns <code>olh["key1"]</code>.</p>
+
+<p>You may be wondering what does this line do :</p>
+
+<pre><code>undef id, type if ?? == 63
+</code></pre>
+
+<p>Well it undef's id and type when it is not ruby 1.9 or higher.  <code>?? == 63</code> returns true if it is not ruby 1.9.* or higher.</p></div><div class="tags"><a href="../tag/ruby.html"><span class="label label-info tag-label">ruby</span></a><a href="../tag/hash.html"><span class="label label-info tag-label">hash</span></a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'az7ar'; // Required - Replace example with your forum shortname
+var disqus_identifier = 'Object Like Hash';
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script></div></div><div class="span4"><div class="well sidebar-nav"><ul class="nav nav-list"><li class="nav-header">categories</li><li><a href="../category/javascript.html">javascript</a></li><li><a href="../category/ruby.html">ruby</a></li><li class="nav-header">tags</li><li><a href="../tag/events.html">events</a></li><li><a href="../tag/hash.html">hash</a></li><li><a href="../tag/node.html">node</a></li><li><a href="../tag/observer%20pattern.html">observer pattern</a></li><li><a href="../tag/ruby.html">ruby</a></li></ul></div></div></div></div></div></body><script type="text/javascript" src="../javascripts/analytics.js"></script><footer id="footer" class="footer"><div class="container"><p id="copy">Copyright ©  Az7ar 2013</p></div></footer></html>
